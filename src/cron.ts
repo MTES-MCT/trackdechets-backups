@@ -1,3 +1,6 @@
-import backup from "./backupers/scaleway";
+import backupScaleway from "./backupers/scaleway";
+import backupMetabase from "./backupers/metabase";
 
-backup().then(() => process.exit(0));
+//backupScaleway().then(() => process.exit(0));
+
+backupMetabase().then(() => process.exit(0));
