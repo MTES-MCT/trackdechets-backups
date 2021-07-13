@@ -7,8 +7,7 @@ const API_HOST = "api.scaleway.com";
 const API_ENDPOINT = "/rdb/v1/regions/fr-par/backups";
 const API_BACKUPS_URL = `https://${API_HOST}${API_ENDPOINT}`;
 
-const { SCALEWAY_SECRET_KEY, SCALEWAY_DB_SANDBOX_ID, SCALEWAY_DB_PROD_ID } =
-  process.env;
+const { SCALEWAY_SECRET_KEY } = process.env;
 
 const auth = { "X-Auth-Token": SCALEWAY_SECRET_KEY };
 
@@ -38,16 +37,16 @@ async function getDownloadUrl(backupId: string) {
   return backup.download_url;
 }
 
-export default async function backup() {
+export default async function backup(databaseId: string) {
   const listBackupsResponse = await client.get("/", {
     params: {
       name: DB_NAME,
       order_by: "created_at_desc",
-      instance_id: SCALEWAY_DB_SANDBOX_ID
+      instance_id: databaseId
     }
   });
   const latest = listBackupsResponse.data.database_backups[0];
 
   const downloadUrl = await getDownloadUrl(latest.id);
-  return download(downloadUrl, "backup.custom");
+  return download(downloadUrl, `${databaseId}.custom`);
 }

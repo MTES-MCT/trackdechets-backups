@@ -16,12 +16,11 @@ const connectionArgs = {
   host: METABASE_HOST,
   username: METABASE_SSH_USER,
   password: METABASE_SSH_PASSWORD,
-  port: METABASE_SSH_PORT
+  port: parseInt(METABASE_SSH_PORT)
 };
 
 export default async function backup() {
   await ssh.connect(connectionArgs);
-  const date = new Date();
   const cmd =
     `PGPASSWORD=${METABASE_POSTGRES_PASSWORD} pg_dump -U ${METABASE_POSTGRES_USER}` +
     ` -h localhost -F c -f backup.custom ${METABASE_POSTGRES_DB}`;
