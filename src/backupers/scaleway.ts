@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createWriteStream } from "fs";
+import { download } from "../utils";
 
 const DB_NAME = "prisma_autobackup";
 const API_HOST = "api.scaleway.com";
@@ -37,21 +38,6 @@ async function getDownloadUrl(backupId: string) {
   return backup.download_url;
 }
 
-/**
- * Get the remote backup file and pipe the content to disk
- */
-async function download(downloadUrl: string) {
-  const writer = createWriteStream("backup.custom");
-  const downloadResponse = await axios.get(downloadUrl, {
-    responseType: "stream"
-  });
-  downloadResponse.data.pipe(writer);
-  return new Promise((resolve, reject) => {
-    writer.on("finish", resolve);
-    writer.on("error", reject);
-  });
-}
-
 export default async function backup() {
   const listBackupsResponse = await client.get("/", {
     params: {
@@ -63,5 +49,5 @@ export default async function backup() {
   const latest = listBackupsResponse.data.database_backups[0];
 
   const downloadUrl = await getDownloadUrl(latest.id);
-  return download(downloadUrl);
+  return download(downloadUrl, "backup.custom");
 }
