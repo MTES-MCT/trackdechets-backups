@@ -1,6 +1,6 @@
 import axios from "axios";
-import { createWriteStream } from "fs";
 import { download } from "../utils";
+import { Writable } from "stream";
 
 const DB_NAME = "prisma_autobackup";
 const API_HOST = "api.scaleway.com";
@@ -37,7 +37,7 @@ async function getDownloadUrl(backupId: string) {
   return backup.download_url;
 }
 
-export default async function backup(databaseId: string) {
+export default async function backup(databaseId: string, writer: Writable) {
   const listBackupsResponse = await client.get("/", {
     params: {
       name: DB_NAME,
@@ -48,5 +48,5 @@ export default async function backup(databaseId: string) {
   const latest = listBackupsResponse.data.database_backups[0];
 
   const downloadUrl = await getDownloadUrl(latest.id);
-  return download(downloadUrl, `${databaseId}.custom`);
+  return download(downloadUrl, writer);
 }

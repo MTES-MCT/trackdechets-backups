@@ -9,17 +9,22 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/cron.ts",
-    "test": "ts-node -r dotenv/config src/cron.ts"
+    "dev": "ts-node -r dotenv/config src/cron.ts",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "cron": "^1.8.2",
-    "node-ssh": "^12.0.0"
+    "end-of-stream": "^1.4.4",
+    "node-ssh": "^12.0.0",
+    "temp": "^0.9.4"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.24",
     "@types/node": "^16.3.1",
-    "@types/ssh2": "^0.5.47",
     "dotenv": "^10.0.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   }
