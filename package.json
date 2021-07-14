@@ -6,6 +6,9 @@
   "repository": "git@github.com:MTES-MCT/trackdechets-backups.git",
   "author": "benoitguigal <benoit.guigal@gmail.com>",
   "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=14.17.3"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/cron.ts",
