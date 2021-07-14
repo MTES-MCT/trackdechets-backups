@@ -604,10 +604,19 @@
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
 
+"@types/node-ssh@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@types/node-ssh/-/node-ssh-7.0.1.tgz#27a1c68b6eeba813584cc1363d341977bf32c3e2"
+  integrity sha512-98EuH7UQl/WWwwDxpbANQ76HwBdzcSnC9zLSdrtVW7jjYeOTQ6TxBygbGwzZR4ho1agbd941UnHCdrXz2sS8JQ==
+  dependencies:
+    "@types/node" "*"
+    "@types/ssh2" "*"
+    "@types/ssh2-streams" "*"
+
 "@types/node@*", "@types/node@^16.3.1":
-  version "16.3.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.3.1.tgz#24691fa2b0c3ec8c0d34bfcfd495edac5593ebb4"
-  integrity sha512-N87VuQi7HEeRJkhzovao/JviiqKjDKMVKxKMfUvSKw+MbkbW8R0nA3fi/MQhhlxV2fQ+2ReM+/Nt4efdrJx3zA==
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.3.2.tgz#655432817f83b51ac869c2d51dd8305fb8342e16"
+  integrity sha512-jJs9ErFLP403I+hMLGnqDRWT0RYKSvArxuBVh2veudHV7ifEC1WAmjJADacZ7mRbA2nWgHtn8xyECMAot0SkAw==
 
 "@types/prettier@^2.1.5":
   version "2.3.2"
@@ -621,7 +630,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/ssh2@^0.5.47":
+"@types/ssh2@*":
   version "0.5.47"
   resolved "https://registry.yarnpkg.com/@types/ssh2/-/ssh2-0.5.47.tgz#67a8b35a0527b2bb668f6dea4c84be6ff1abdc19"
   integrity sha512-ZhqJg8BRV7OsCi0KVqPr27lUMMmLEeHYw1VXUNGGDlQEDq9HTsKx+wYvi8E6oNC6gRZ7PV99ZMZmMr5vztcYYA==
@@ -633,11 +642,6 @@
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
-
-"@types/tmp@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@types/tmp/-/tmp-0.2.1.tgz#83ecf4ec22a8c218c71db25f316619fe5b986011"
-  integrity sha512-7cTXwKP/HLOPVgjg+YhBdQ7bMiobGMuoBmrGmqwIWJv8elC6t1DfVc/mn4fD9UE1IjhwmhaQ5pGVXkmXbH0rhg==
 
 "@types/yargs-parser@*":
   version "20.2.1"
