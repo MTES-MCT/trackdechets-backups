@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/cron.ts",
+    "start": "node -r dotenv/config dist/cron.js",
     "dev": "ts-node -r dotenv/config src/cron.ts",
     "test": "jest"
   },
