@@ -7,7 +7,7 @@
   "author": "benoitguigal <benoit.guigal@gmail.com>",
   "license": "AGPL-3.0-only",
   "engines": {
-    "node": ">=14.17.3"
+    "node": ">=14.17.2"
   },
   "scripts": {
     "build": "tsc",
