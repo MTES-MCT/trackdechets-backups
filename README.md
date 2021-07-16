@@ -5,6 +5,9 @@ Backups journaliers des bases de données suivantes sur un VPS OVH :
 - prisma sandbox
 - metabase
 
+
+### Administration
+
 ```
 ssh <username>@<ip-serveur> -p <port>
 
@@ -18,4 +21,9 @@ pm2 logs
 pm2 restart cron
 ```
 
-Les backups sont stockés dans le dossier `./backups`
+### Backups
+Les backups sont stockés dans le dossier `./backups`. Une rotation est en place pour stocker les 7 derniers backups uniquement.
+
+### Idées améliorations
+- stocker les fichiers sur OVH object storage
+- déployer sur Scalingo
