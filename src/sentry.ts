@@ -7,7 +7,6 @@ export function initSentry() {
   if (SENTRY_DSN) {
     Sentry.init({
       dsn: SENTRY_DSN,
-      environment: "td-backups",
       integrations: [new CaptureConsole({ levels: ["error"] })]
     });
     return Sentry;
