@@ -7,7 +7,7 @@ import { todayStr } from "./utils";
 import { initSentry } from "./sentry";
 import { s3Writer } from "./s3";
 
-const { SCALEWAY_DB_SANDBOX_ID, SCALEWAY_DB_PROD_ID } = process.env;
+const { SCALINGO_SANDBOX_APP, SCALINGO_PRODUCTION_APP } = process.env;
 
 const cronTime = "0 1 * * *";
 
@@ -35,39 +35,39 @@ const jobs = [
       }
     }
   }),
-  // scaleway prisma sandbox backup
+  // scalingo prisma sandbox backup
   new cron.CronJob({
     ...cronOpts,
     onTick: async () => {
       try {
-        const backupPath = path.join("prisma-sandbox", `${todayStr()}.custom`);
+        const backupPath = path.join("prisma-sandbox", `${todayStr()}.tar.gz`);
         const { writer, upload } = s3Writer(backupPath);
-        await backupPrisma(SCALEWAY_DB_SANDBOX_ID, writer);
+        await backupPrisma(SCALINGO_SANDBOX_APP, writer);
         const { Location } = await upload;
         console.log(`Successfully uploaded sandbox backup to ${Location}`);
       } catch (err) {
         Sentry.captureException(err);
       }
     }
-  }),
-  // scaleway prisma prod backup
-  new cron.CronJob({
-    ...cronOpts,
-    onTick: async () => {
-      try {
-        const backupPath = path.join(
-          "prisma-production",
-          `${todayStr()}.custom`
-        );
-        const { writer, upload } = s3Writer(backupPath);
-        await backupPrisma(SCALEWAY_DB_PROD_ID, writer);
-        const { Location } = await upload;
-        console.log(`Successfully uploaded production backup to ${Location}`);
-      } catch (err) {
-        Sentry.captureException(err);
-      }
-    }
   })
+  // scalingo prisma prod backup
+  // new cron.CronJob({
+  //   ...cronOpts,
+  //   onTick: async () => {
+  //     try {
+  //       const backupPath = path.join(
+  //         "prisma-production",
+  //         `${todayStr()}.tar.gz`
+  //       );
+  //       const { writer, upload } = s3Writer(backupPath);
+  //       await backupPrisma(SCALINGO_PRODUCTION_APP, writer);
+  //       const { Location } = await upload;
+  //       console.log(`Successfully uploaded production backup to ${Location}`);
+  //     } catch (err) {
+  //       Sentry.captureException(err);
+  //     }
+  //   }
+  // })
 ];
 
 jobs.forEach((job) => job.start());
