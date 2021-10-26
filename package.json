@@ -28,6 +28,7 @@
     "temp": "^0.9.4"
   },
   "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^26.0.24",
     "@types/node": "^16.3.1",
     "@types/node-ssh": "^7.0.1",
