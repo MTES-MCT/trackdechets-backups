@@ -2,12 +2,12 @@ require("dotenv").config();
 import * as cron from "cron";
 import backupPrisma from "./backupers/prisma";
 import backupMetabase from "./backupers/metabase";
-import { createWriteStream } from "fs";
 import path from "path";
-import { createDirIfNotExists, rotate, todayStr } from "./utils";
+import { todayStr } from "./utils";
 import { initSentry } from "./sentry";
+import { s3Writer } from "./s3";
 
-const { SCALEWAY_DB_SANDBOX_ID, SCALEWAY_DB_PROD_ID, SENTRY_DSN } = process.env;
+const { SCALINGO_SANDBOX_APP, SCALINGO_PRODUCTION_APP } = process.env;
 
 const cronTime = "0 1 * * *";
 
@@ -17,76 +17,57 @@ const cronOpts = {
   runOnInit: true
 };
 
-// number of backups to keep
-const rotateMaxFiles = 7;
-
-const prismaSandboxBackupsPath = createDirIfNotExists("backups/prisma/sandbox");
-const prismaProdBackupsPath = createDirIfNotExists("backups/prisma/prod");
-const metabaseBackupsPath = createDirIfNotExists("backups/metabase");
-
 const Sentry = initSentry();
 
 const jobs = [
   // metabase backup
   new cron.CronJob({
     ...cronOpts,
-    onTick: async (onComplete) => {
+    onTick: async () => {
       try {
-        const backupPath = path.join(
-          metabaseBackupsPath,
-          `${todayStr()}.custom`
-        );
-        const writer = createWriteStream(backupPath);
+        const backupPath = path.join("metabase", `${todayStr()}.custom`);
+        const { writer, upload } = s3Writer(backupPath);
         await backupMetabase(writer);
-        onComplete();
+        const { Location } = await upload;
+        console.log(`Successfully uploaded metabase backup to ${Location}`);
       } catch (err) {
         Sentry.captureException(err);
       }
-    },
-    onComplete: () => {
-      rotate(metabaseBackupsPath, { maxFiles: rotateMaxFiles });
     }
   }),
-  // scaleway prisma sandbox backup
+  // scalingo prisma sandbox backup
   new cron.CronJob({
     ...cronOpts,
-    onTick: async (onComplete) => {
+    onTick: async () => {
       try {
-        const backupPath = path.join(
-          prismaSandboxBackupsPath,
-          `${todayStr()}.custom`
-        );
-        const writer = createWriteStream(backupPath);
-        await backupPrisma(SCALEWAY_DB_SANDBOX_ID, writer);
-        onComplete();
+        const backupPath = path.join("prisma-sandbox", `${todayStr()}.tar.gz`);
+        const { writer, upload } = s3Writer(backupPath);
+        await backupPrisma(SCALINGO_SANDBOX_APP, writer);
+        const { Location } = await upload;
+        console.log(`Successfully uploaded sandbox backup to ${Location}`);
       } catch (err) {
         Sentry.captureException(err);
       }
-    },
-    onComplete: () => {
-      rotate(prismaSandboxBackupsPath, { maxFiles: rotateMaxFiles });
-    }
-  }),
-  // scaleway prisma prod backup
-  new cron.CronJob({
-    ...cronOpts,
-    onTick: async (onComplete) => {
-      try {
-        const backupPath = path.join(
-          prismaProdBackupsPath,
-          `${todayStr()}.custom`
-        );
-        const writer = createWriteStream(backupPath);
-        await backupPrisma(SCALEWAY_DB_PROD_ID, writer);
-        onComplete();
-      } catch (err) {
-        Sentry.captureException(err);
-      }
-    },
-    onComplete: () => {
-      rotate(prismaProdBackupsPath, { maxFiles: rotateMaxFiles });
     }
   })
+  // scalingo prisma prod backup
+  // new cron.CronJob({
+  //   ...cronOpts,
+  //   onTick: async () => {
+  //     try {
+  //       const backupPath = path.join(
+  //         "prisma-production",
+  //         `${todayStr()}.tar.gz`
+  //       );
+  //       const { writer, upload } = s3Writer(backupPath);
+  //       await backupPrisma(SCALINGO_PRODUCTION_APP, writer);
+  //       const { Location } = await upload;
+  //       console.log(`Successfully uploaded production backup to ${Location}`);
+  //     } catch (err) {
+  //       Sentry.captureException(err);
+  //     }
+  //   }
+  // })
 ];
 
 jobs.forEach((job) => job.start());
