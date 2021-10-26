@@ -19,6 +19,7 @@
   "dependencies": {
     "@sentry/integrations": "^6.9.0",
     "@sentry/node": "^6.9.0",
+    "aws-sdk": "^2.1014.0",
     "axios": "^0.21.1",
     "cron": "^1.8.2",
     "end-of-stream": "^1.4.4",
