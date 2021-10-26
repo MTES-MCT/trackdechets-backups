@@ -1,4 +1,3 @@
-require("dotenv").config();
 import * as cron from "cron";
 import backupPrisma from "./backupers/prisma";
 import backupMetabase from "./backupers/metabase";
