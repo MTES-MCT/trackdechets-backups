@@ -1,0 +1,1 @@
+clock: node dist/cron.js
