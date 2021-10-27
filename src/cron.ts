@@ -45,25 +45,25 @@ const jobs = [
         console.log(err);
       }
     }
+  }),
+  //scalingo prisma prod backup
+  new cron.CronJob({
+    ...cronOpts,
+    onTick: async () => {
+      try {
+        const backupPath = path.join(
+          "prisma-production",
+          `${todayStr()}.tar.gz`
+        );
+        const { writer, upload } = s3Writer(backupPath);
+        await backupPrisma(SCALINGO_PRODUCTION_APP, writer);
+        const { Location } = await upload;
+        console.log(`Successfully uploaded production backup to ${Location}`);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   })
-  // scalingo prisma prod backup
-  // new cron.CronJob({
-  //   ...cronOpts,
-  //   onTick: async () => {
-  //     try {
-  //       const backupPath = path.join(
-  //         "prisma-production",
-  //         `${todayStr()}.tar.gz`
-  //       );
-  //       const { writer, upload } = s3Writer(backupPath);
-  //       await backupPrisma(SCALINGO_PRODUCTION_APP, writer);
-  //       const { Location } = await upload;
-  //       console.log(`Successfully uploaded production backup to ${Location}`);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // })
 ];
 
 jobs.forEach((job) => job.start());

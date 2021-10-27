@@ -15,9 +15,9 @@ test("sandbox backup", async () => {
   expect(Buffer.byteLength(buff)).toBeGreaterThan(0);
 }, 50000);
 
-// test("prod backup", async () => {
-//   const writer = temp.createWriteStream();
-//   await backup(SCALEWAY_DB_PROD_ID, writer);
-//   const buff = readFileSync(writer.path);
-//   expect(Buffer.byteLength(buff)).toBeGreaterThan(0);
-// }, 10000);
+test("prod backup", async () => {
+  const writer = temp.createWriteStream();
+  await backup(SCALINGO_PRODUCTION_APP, writer);
+  const buff = readFileSync(writer.path);
+  expect(Buffer.byteLength(buff)).toBeGreaterThan(0);
+}, 10000);
