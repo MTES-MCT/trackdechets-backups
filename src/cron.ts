@@ -3,7 +3,6 @@ import backupPrisma from "./backupers/prisma";
 import backupMetabase from "./backupers/metabase";
 import path from "path";
 import { todayStr } from "./utils";
-import { initSentry } from "./sentry";
 import { s3Writer } from "./s3";
 
 const { SCALINGO_SANDBOX_APP, SCALINGO_PRODUCTION_APP } = process.env;
@@ -15,8 +14,6 @@ const cronOpts = {
   timeZone: "Europe/Paris",
   runOnInit: true
 };
-
-const Sentry = initSentry();
 
 const jobs = [
   // metabase backup
@@ -30,7 +27,7 @@ const jobs = [
         const { Location } = await upload;
         console.log(`Successfully uploaded metabase backup to ${Location}`);
       } catch (err) {
-        Sentry.captureException(err);
+        console.log(err);
       }
     }
   }),
@@ -45,7 +42,7 @@ const jobs = [
         const { Location } = await upload;
         console.log(`Successfully uploaded sandbox backup to ${Location}`);
       } catch (err) {
-        Sentry.captureException(err);
+        console.log(err);
       }
     }
   })
@@ -63,7 +60,7 @@ const jobs = [
   //       const { Location } = await upload;
   //       console.log(`Successfully uploaded production backup to ${Location}`);
   //     } catch (err) {
-  //       Sentry.captureException(err);
+  //       console.log(err);
   //     }
   //   }
   // })
