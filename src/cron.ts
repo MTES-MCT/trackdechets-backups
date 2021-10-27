@@ -7,7 +7,7 @@ import { s3Writer } from "./s3";
 
 const { SCALINGO_SANDBOX_APP, SCALINGO_PRODUCTION_APP } = process.env;
 
-const cronTime = "0 1 * * *";
+const cronTime = "0 3 * * *";
 
 const cronOpts = {
   cronTime,
