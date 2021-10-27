@@ -1,1 +1,0 @@
-backup: node dist/src/cron.js
