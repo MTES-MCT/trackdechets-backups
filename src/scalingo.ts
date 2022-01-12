@@ -2,8 +2,8 @@ import axios from "axios";
 
 const { SCALINGO_TOKEN } = process.env;
 
-const SCALINGO_API_URL = "https://api.osc-fr1.scalingo.com";
-const SCALINGO_DB_API_URL = "https://db-api.osc-fr1.scalingo.com";
+const SCALINGO_API_URL = "https://api.osc-secnum-fr1.scalingo.com";
+const SCALINGO_DB_API_URL = "https://db-api.osc-secnum-fr1.scalingo.com";
 
 type Addon = {
   id: string;
