@@ -6,12 +6,17 @@ const s3 = new S3({
   region: process.env.S3_REGION,
   accessKeyId: process.env.S3_ACCESS_KEY_ID,
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-  signatureVersion: "v4"
+  signatureVersion: "v4",
 });
 
 export function s3Writer(filename: string) {
   const pass = new Stream.PassThrough();
-  const params = { Bucket: process.env.S3_BUCKET, Key: filename, Body: pass };
+  const params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: filename,
+    Body: pass,
+    partSize: process.env.S3_ENDPOINT_PART_SIZE,
+  };
   const upload = s3.upload(params).promise();
   return { writer: pass, upload };
 }
