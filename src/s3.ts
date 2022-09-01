@@ -20,12 +20,17 @@ const s3 = new S3({
 
 export function s3Writer(filename: string) {
   const pass = new Stream.PassThrough();
-  const params = {
+  const params: S3.PutObjectRequest = {
     Bucket: S3_BUCKET,
     Key: filename,
-    Body: pass,
-    partSize: S3_ENDPOINT_PART_SIZE ? parseInt(S3_ENDPOINT_PART_SIZE, 10) : 500
+    Body: pass
   };
-  const upload = s3.upload(params).promise();
+  const options: S3.ManagedUpload.ManagedUploadOptions = {
+    ...(S3_ENDPOINT_PART_SIZE
+      ? { partSize: parseInt(S3_ENDPOINT_PART_SIZE, 10) }
+      : {})
+  };
+
+  const upload = s3.upload(params, options).promise();
   return { writer: pass, upload };
 }
