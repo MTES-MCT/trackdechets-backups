@@ -13,16 +13,16 @@ const cronTimeProd = "17 3 * * *";
 const cronOpts = {
   cronTime,
   timeZone: "Europe/Paris",
-  runOnInit: true
+  runOnInit: true,
 };
 const prodCronOpts = {
   cronTime: cronTimeProd,
   timeZone: "Europe/Paris",
-  runOnInit: true
+  runOnInit: true,
 };
 const jobs = [
   // metabase backup
-  new cron.CronJob({
+  cron.CronJob.from({
     ...cronOpts,
     onTick: async () => {
       try {
@@ -34,10 +34,10 @@ const jobs = [
       } catch (err) {
         console.log(err);
       }
-    }
+    },
   }),
   // scalingo prisma sandbox backup
-  new cron.CronJob({
+  cron.CronJob.from({
     ...cronOpts,
     onTick: async () => {
       try {
@@ -49,10 +49,10 @@ const jobs = [
       } catch (err) {
         console.log(err);
       }
-    }
+    },
   }),
   //scalingo prisma prod backup
-  new cron.CronJob({
+  cron.CronJob.from({
     ...prodCronOpts,
     onTick: async () => {
       try {
@@ -67,8 +67,8 @@ const jobs = [
       } catch (err) {
         console.log(err);
       }
-    }
-  })
+    },
+  }),
 ];
 
 jobs.forEach((job) => job.start());
