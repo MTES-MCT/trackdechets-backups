@@ -7,14 +7,19 @@ import { s3Writer } from "./s3";
 
 const { SCALINGO_SANDBOX_APP, SCALINGO_PRODUCTION_APP } = process.env;
 
-const cronTime = "0 3 * * *";
+const cronTime = "7 3 * * *";
+const cronTimeProd = "17 3 * * *";
 
 const cronOpts = {
   cronTime,
   timeZone: "Europe/Paris",
   runOnInit: true
 };
-
+const prodCronOpts = {
+  cronTime: cronTimeProd,
+  timeZone: "Europe/Paris",
+  runOnInit: true
+};
 const jobs = [
   // metabase backup
   new cron.CronJob({
@@ -48,7 +53,7 @@ const jobs = [
   }),
   //scalingo prisma prod backup
   new cron.CronJob({
-    ...cronOpts,
+    ...prodCronOpts,
     onTick: async () => {
       try {
         const backupPath = path.join(
