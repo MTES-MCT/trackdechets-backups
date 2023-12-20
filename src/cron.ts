@@ -7,8 +7,8 @@ import { s3Writer } from "./s3";
 
 const { SCALINGO_SANDBOX_APP, SCALINGO_PRODUCTION_APP } = process.env;
 
-const cronTime = "7 3 * * *";
-const cronTimeProd = "17 3 * * *";
+const cronTime = "17 3 * * *";
+const cronTimeProd = "7 3 * * *";
 
 const cronOpts = {
   cronTime,
@@ -55,6 +55,7 @@ const jobs = [
   cron.CronJob.from({
     ...prodCronOpts,
     onTick: async () => {
+      console.log("Starting production backup process")
       try {
         const backupPath = path.join(
           "prisma-production",

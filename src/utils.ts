@@ -8,6 +8,7 @@ export async function download(downloadUrl: string, writer: Writable) {
   const downloadResponse = await axios.get(downloadUrl, {
     responseType: "stream"
   });
+  console.log("Response downloaded")
   downloadResponse.data.pipe(writer);
   return new Promise((resolve, reject) => {
     writer.on("finish", () => {
