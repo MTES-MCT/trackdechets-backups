@@ -13,7 +13,7 @@ const cronTimeProd = "7 3 * * *";
 const cronOpts = {
   cronTime,
   timeZone: "Europe/Paris",
-  runOnInit: true,
+  runOnInit: false,
 };
 const prodCronOpts = {
   cronTime: cronTimeProd,
@@ -42,7 +42,7 @@ const jobs = [
     onTick: async () => {
       try {
         const backupPath = path.join("prisma-sandbox", `${todayStr()}.tar.gz`);
-        const { writer, upload } = s3Writer(backupPath);
+        const { writer, upload } = s3Writer(backupPath, { logProgress: true });
         await backupPrisma(SCALINGO_SANDBOX_APP, writer);
         const { Location } = await upload;
         console.log(`Successfully uploaded sandbox backup to ${Location}`);

@@ -29,22 +29,18 @@ export function s3Writer(filename: string, opts: S3WriterOpts = {}) {
     Key: filename,
     Body: pass,
   };
+  const partSize = parseInt(S3_ENDPOINT_PART_SIZE, 10);
   const options: S3.ManagedUpload.ManagedUploadOptions = {
-    ...(S3_ENDPOINT_PART_SIZE
-      ? { partSize: parseInt(S3_ENDPOINT_PART_SIZE, 10) }
-      : {}),
+    ...(S3_ENDPOINT_PART_SIZE ? { partSize } : {}),
   };
 
   const upload = s3.upload(params, options);
 
   if (opts.logProgress) {
-    let logPercentThreshold = 1;
-    upload.on("httpUploadProgress", ({ loaded, total }) => {
-      const progress = Math.floor((loaded / total) * 100);
-      if (progress > logPercentThreshold) {
-        console.log(`Uploaded ${progress}%`);
-        logPercentThreshold = Math.floor(progress) + 1;
-      }
+    upload.on("httpUploadProgress", ({ loaded }) => {
+      const chunk = loaded / partSize;
+
+      console.log(`Uploaded chunk n° ${chunk}`);
     });
   }
 
