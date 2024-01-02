@@ -39,8 +39,10 @@ export function s3Writer(filename: string, opts: S3WriterOpts = {}) {
   if (opts.logProgress) {
     upload.on("httpUploadProgress", ({ loaded }) => {
       const chunk = loaded / partSize;
-
-      console.log(`Uploaded chunk n° ${chunk}`);
+      // log 1 out of 5
+      if (!(chunk % 5)) {
+        console.log(`Uploaded chunk n° ${chunk}`);
+      }
     });
   }
 
