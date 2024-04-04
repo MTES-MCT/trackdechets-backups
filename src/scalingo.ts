@@ -59,9 +59,9 @@ export async function listBackups(app: string, addon: Addon) {
   const r = await axios.get<{
     database_backups: Backup[];
   }>(listBackupsUrl, { headers: auth });
-  return r.data.database_backups.sort((a, b) =>
-    b.created_at.localeCompare(a.created_at)
-  );
+  return r.data.database_backups
+    .filter((b) => b.status === "done")
+    .sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
 
 export async function getBackupDownloadLink(
@@ -73,7 +73,7 @@ export async function getBackupDownloadLink(
   const auth = { Authorization: `Bearer ${bearer}` };
   const backupDownloadLinkUrl = `${SCALINGO_DB_API_URL}/api/databases/${addon.id}/backups/${backup.id}/archive`;
   const r = await axios.get<{ download_url: string }>(backupDownloadLinkUrl, {
-    headers: auth
+    headers: auth,
   });
   return r.data.download_url;
 }
