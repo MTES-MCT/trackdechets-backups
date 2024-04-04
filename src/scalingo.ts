@@ -13,6 +13,7 @@ type Addon = {
 type Backup = {
   id: string;
   created_at: string;
+  status: string;
 };
 
 export async function getBearerToken() {
